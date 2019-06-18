@@ -82,7 +82,7 @@ const nodemailer = require('nodemailer');
 
 router.post('/forgotPassword', (req, res) => {
   if (req.body.email === '') {
-    res.status(400).send('email required');
+    res.send('email required');
   }
   console.error(req.body.email);
   Seller.findOne({email : req.body.email})
@@ -90,7 +90,7 @@ router.post('/forgotPassword', (req, res) => {
     console.log("agaya",user)
     if (user === null) {
       console.error('email not in database');
-      res.status(403).send('email not in db');
+      res.send( { resStatus:'email not in db'} );
     } else {
       const token = crypto.randomBytes(20).toString('hex');
       var myquery = { resetPasswordToken: token ,resetPasswordExpires: Date.now() + 360000, };
@@ -139,7 +139,7 @@ router.post('/forgotPassword', (req, res) => {
           console.error('there was an error: ', err);
         } else {
           console.log('here is the res: ', response);
-          res.status(200).json('recovery email sent');
+          res.status(200).json( { resStatus:'recovery email sent' } );
         }
       });
     }
@@ -303,7 +303,7 @@ router.get('/reset', (req, res) => {
   });
 })
 
-router.get('/reset:token', (req, res, next) => {
+router.get('/reset/:token', (req, res, next) => {
   Seller.find({}, function (err, users) {
     users.forEach(function (user) {
       if (user.resetPasswordToken === req.params.token) {
@@ -328,7 +328,25 @@ router.patch('/sellerupdate/:updatedSellersId',(req,res,next)=>{
   })
 });
 
-
+router.patch('/updateSeller',(req,res,next)=>{
+  Seller.updateOne({ "_id": req.query.sellersId },
+  {
+      $set:
+      {
+          "name": req.body.name,
+          "email": req.body.email,
+          "contact": req.body.contact,
+          "password": req.body.password,
+          "address": req.body.address
+      }
+  }).then(function (user) {
+      res.send( 
+        { user,
+          updateStatus: 'user updated' 
+        } 
+      );
+  })
+});
 
 router.patch('/:sellersId',(req,res,next)=>{
   Seller.updateOne({ "_id": req.params.sellersId.toString() },
