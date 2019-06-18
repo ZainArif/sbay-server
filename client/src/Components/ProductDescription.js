@@ -16,29 +16,20 @@ export default class ProductDescription extends Component {
     }
 
     componentDidMount(){
-    // var url = "http://localhost:7000/products/5bfbc91839d2532708fe0ecd";
-
-
-        // var url = new URL("http://localhost:7000/products/5bfbc91839d2532708fe0ecd");
-        // params ={param: this.props.match.params.myid};
-
-// fetch(url, {param: this.props.match.params.myid}).then(res => res.json())
-// .then(response => console.log('Success:', JSON.stringify(response)))
-// .catch(error => console.error('Error:', error));
         axios.get(`http://localhost:7000/products/${this.props.match.params.myid}`)
         .then(res => {
           const products = res.data;
           console.log(products);
           this.setState({ products });
         })
-//         fetch('http://localhost:7000/products/' + this.props.match.params.myid)
-//   .then(function(response) {
-//     return response;
-//   })
-//   .then(function(myJson) {
-//     console.log(JSON.stringify(myJson));
-//   })
     }
+
+
+    getCustomize(){
+      console.log("heyy");
+    }
+
+
     render(){
         const {products} = this.state;
         return(
@@ -98,7 +89,7 @@ export default class ProductDescription extends Component {
             
             <div className="centerCart"> 
             <br/><br/>
-
+<Button onClick={this.getCustomize.bind(this)}> CUSTOMIZE </Button>
 </div>
             </div>
         </CardContent>

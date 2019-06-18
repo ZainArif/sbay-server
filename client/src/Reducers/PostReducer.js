@@ -50,11 +50,11 @@ export default function (state = initialState, action) {
                         }
                     });
                     newCart = newCart.filter(elm=> elm !== undefined);
-                    
+                    // let cartCounter= state.cartCounter-1;
                     return {
                     ...state,
                     cart: newCart
-                }}
+                                }}
         //      {
         //         var newCart = state.cart.filter(item => item !== action.object),
         //         cartCounter =  state.cartCounter-1
